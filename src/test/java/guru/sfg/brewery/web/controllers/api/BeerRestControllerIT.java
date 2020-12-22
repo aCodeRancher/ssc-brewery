@@ -1,9 +1,11 @@
 package guru.sfg.brewery.web.controllers.api;
 
+import guru.sfg.brewery.bootstrap.DefaultBreweryLoader;
 import guru.sfg.brewery.web.controllers.BaseIT;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-
+import java.util.UUID;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -13,6 +15,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest
 public class BeerRestControllerIT extends BaseIT {
 
+
     @Test
     void findBeers() throws Exception{
         mockMvc.perform(get("/api/v1/beer/"))
@@ -21,13 +24,28 @@ public class BeerRestControllerIT extends BaseIT {
 
     @Test
     void findBeerById() throws Exception{
-        mockMvc.perform(get("/api/v1/beer/97df0c39-90c4-4ae0-b663-453e8e19c311"))
+       mockMvc.perform(get("/api/v1/beer/97df0c39-90c4-4ae0-b663-453e8e19c311"))
+                .andExpect(status().isOk());
+     }
+
+    @Test
+    void findBeerByUpc() throws Exception{
+      mockMvc.perform(get("/api/v1/beerUpc/0631234200036"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    void findBeerByUpc() throws Exception{
-        mockMvc.perform(get("/api/v1/beerUpc/0631234200036"))
-                .andExpect(status().isOk());
+    void findBeerByUpcWithScott() throws Exception{
+        String beer1Upc = DefaultBreweryLoader.BEER_1_UPC.toString();
+         mockMvc.perform(get("/api/v1/beerUpc/"+beer1Upc)
+                                   .with(httpBasic("scott", "tiger"))).andExpect(status().isOk());
     }
+
+    @Test
+    void findBeerByIdWithScott() throws Exception{
+        UUID randomUUID = UUID.randomUUID();
+        String uuidString = randomUUID.toString();
+        mockMvc.perform(get("/api/v1/beer/" + uuidString).with(httpBasic("scott", "tiger")))
+                 .andExpect(status().isOk());
+     }
 }
