@@ -22,6 +22,6 @@ public class Authority {
 
     private String role;
 
-    @ManyToMany(mappedBy = "authorities")
+    @ManyToMany(mappedBy = "authorities", fetch = FetchType.EAGER)
     private Set<User> users;
 }
