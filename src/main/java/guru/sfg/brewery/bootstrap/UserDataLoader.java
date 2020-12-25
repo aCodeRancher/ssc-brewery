@@ -4,6 +4,7 @@ import guru.sfg.brewery.domain.security.Authority;
 import guru.sfg.brewery.domain.security.User;
 import guru.sfg.brewery.repositories.security.AuthorityRepository;
 import guru.sfg.brewery.repositories.security.UserRepository;
+import guru.sfg.brewery.security.SfgPasswordEncoderFactories;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
@@ -20,7 +21,8 @@ public class UserDataLoader implements CommandLineRunner {
 
     private final AuthorityRepository authorityRepository;
     private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder =
+                  SfgPasswordEncoderFactories.createDelegatingPasswordEncoder("bcrypt10");
 
     private void loadSecurityData() {
         Authority admin = authorityRepository.save(Authority.builder().role("ADMIN").build());
