@@ -2,6 +2,7 @@ package guru.sfg.brewery.web.controllers;
 
 import guru.sfg.brewery.domain.Beer;
 import guru.sfg.brewery.repositories.BeerRepository;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -81,38 +82,41 @@ public class BeerControllerIT extends BaseIT {
                 .andExpect(status().isUnauthorized());
     }
 
-    @Test
-    void findBeersByIdWithAnonymous() throws Exception{
-        Beer beer =beerRepository.findAll().get(0);
-        String beerId = beer.getId().toString();
-        mockMvc.perform(get("/beers/"+ beerId).with(anonymous()))
-                .andExpect(status().isUnauthorized());
-     }
+    @Nested
+    class FindByIdTest {
+        @Test
+        void findBeersByIdWithAnonymous() throws Exception {
+            Beer beer = beerRepository.findAll().get(0);
+            String beerId = beer.getId().toString();
+            mockMvc.perform(get("/beers/" + beerId).with(anonymous()))
+                    .andExpect(status().isUnauthorized());
+        }
 
-    @Test
-    void findBeersByIdWithAdmin() throws Exception{
-        Beer beer =beerRepository.findAll().get(0);
-        String beerId = beer.getId().toString();
-        mockMvc.perform(get("/beers/"+ beerId).with(httpBasic("spring","guru")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/beerDetails"));
-    }
+        @Test
+        void findBeersByIdWithAdmin() throws Exception {
+            Beer beer = beerRepository.findAll().get(0);
+            String beerId = beer.getId().toString();
+            mockMvc.perform(get("/beers/" + beerId).with(httpBasic("spring", "guru")))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("beers/beerDetails"));
+        }
 
-    @Test
-    void findBeersByIdWithCustomer() throws Exception{
-        Beer beer =beerRepository.findAll().get(0);
-        String beerId = beer.getId().toString();
-        mockMvc.perform(get("/beers/"+ beerId).with(httpBasic("scott","tiger")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/beerDetails"));
-    }
-    @Test
-    void findBeersByIdWithUser() throws Exception{
-        Beer beer =beerRepository.findAll().get(0);
-        String beerId = beer.getId().toString();
-        mockMvc.perform(get("/beers/"+ beerId).with(httpBasic("user","password")))
-                .andExpect(status().isOk())
-                .andExpect(view().name("beers/beerDetails"));
-    }
+        @Test
+        void findBeersByIdWithCustomer() throws Exception {
+            Beer beer = beerRepository.findAll().get(0);
+            String beerId = beer.getId().toString();
+            mockMvc.perform(get("/beers/" + beerId).with(httpBasic("scott", "tiger")))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("beers/beerDetails"));
+        }
 
+        @Test
+        void findBeersByIdWithUser() throws Exception {
+            Beer beer = beerRepository.findAll().get(0);
+            String beerId = beer.getId().toString();
+            mockMvc.perform(get("/beers/" + beerId).with(httpBasic("user", "password")))
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("beers/beerDetails"));
+        }
+    }
 }
