@@ -25,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                             .antMatchers("/h2-console/**").permitAll() //do not use in production!
                             .antMatchers("/", "/webjars/**", "/login", "/resources/**").permitAll()
                             .antMatchers("/beers/find").hasAnyRole("ADMIN", "CUSTOMER","USER")
-                            .mvcMatchers(HttpMethod.GET,"/beers/*").hasAnyRole("ADMIN", "CUSTOMER", "USER")
+                            .mvcMatchers(HttpMethod.GET,"/beers/{beerId}").hasAnyRole("ADMIN", "CUSTOMER", "USER")
                             .antMatchers(  "/beers/new", "/beers/**/edit").hasAnyRole("ADMIN", "CUSTOMER", "USER")
                             .antMatchers(HttpMethod.GET, "/api/v1/beer/**").hasAnyRole("ADMIN","CUSTOMER","USER")
                             .mvcMatchers(HttpMethod.DELETE, "/api/v1/beer/**").hasRole("ADMIN")
