@@ -79,6 +79,7 @@ public class UserDataLoader implements CommandLineRunner {
                 .build());
 
         log.debug("Users Loaded: " + userRepository.count());
+        adminRole.getAuthorities().forEach(authority -> System.out.println(authority.getPermission()));
     }
 
     @Override
