@@ -44,6 +44,14 @@ public class BeerControllerIT extends BaseIT{
                     .andExpect(model().attributeExists("beer"));
         }
 
+        @ParameterizedTest(name = "#{index} with [{arguments}]")
+        @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamNotAdmin")
+        void initCreationFormNotAdmin(String user, String pwd) throws Exception {
+
+            mockMvc.perform(get("/beers/new").with(httpBasic(user, pwd)))
+                    .andExpect(status().isForbidden());
+
+        }
         @Test
         void initCreationFormNotAuth() throws Exception {
             mockMvc.perform(get("/beers/new"))
@@ -63,6 +71,7 @@ public class BeerControllerIT extends BaseIT{
                     .andExpect(view().name("beers/findBeers"))
                     .andExpect(model().attributeExists("beer"));
         }
+
 
         @Test
         void findBeersWithAnonymous() throws Exception{
@@ -211,6 +220,14 @@ public class BeerControllerIT extends BaseIT{
                     .andExpect(status().isOk());
         }
 
+        @ParameterizedTest(name = "#{index} with [{arguments}]")
+        @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamNotAdmin")
+        void initUpdateBeerFormNotAdmin(String user, String password) throws Exception{
+            Beer firstBeer = beerRepository.findAll().get(0);
+            mockMvc.perform(get("/beers/"+firstBeer.getId()+"/edit").with(httpBasic(user, password)))
+                    .andExpect(status().isForbidden());
+        }
+
        @Test
         void initUpdateBeerFormNotAuth() throws Exception{
             Beer firstBeer = beerRepository.findAll().get(0);
@@ -226,6 +243,14 @@ public class BeerControllerIT extends BaseIT{
                     .andExpect(model().attributeExists("beer"))
                     .andExpect(view().name("beers/createBeer"))
                     .andExpect(status().isOk());
+        }
+
+        @ParameterizedTest(name = "#{index} with [{arguments}]")
+        @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamNotAdmin")
+        void initCreateBeerFormNotAdmin(String user, String password) throws Exception{
+
+            mockMvc.perform(get("/beers/new").with(httpBasic(user, password)))
+                   .andExpect(status().isForbidden());
         }
 
         @Test
@@ -250,6 +275,13 @@ public class BeerControllerIT extends BaseIT{
 
         @ParameterizedTest(name = "#{index} with [{arguments}]")
         @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamNotAdmin")
+        void udpateBeerNotAdmin(String user, String pwd) throws Exception{
+            Beer firstBeer = beerRepository.findAll().get(0);
+            mockMvc.perform(post("/beers/"+ firstBeer.getId()+ "/edit").with(httpBasic(user, pwd)))
+                    .andExpect(status().isForbidden());
+        }
+
+       @Test
         void udpateBeerNoAuth() throws Exception{
             Beer firstBeer = beerRepository.findAll().get(0);
             mockMvc.perform(post("/beers/"+ firstBeer.getId()+ "/edit").with(anonymous()))
