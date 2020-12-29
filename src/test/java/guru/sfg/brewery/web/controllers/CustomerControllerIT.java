@@ -135,7 +135,7 @@ public class CustomerControllerIT extends BaseIT {
         UUID customerId = customer.getId();
 
         @ParameterizedTest(name = "#{index} with [{arguments}]")
-        @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamAdminCustomer")
+        @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamAdmin")
         void initUpdateCustomerForm(String user, String pwd) throws Exception{
 
             mockMvc.perform(get("/customers/"+ customerId+ "/edit")
@@ -144,7 +144,7 @@ public class CustomerControllerIT extends BaseIT {
         }
 
         @ParameterizedTest(name = "#{index} with [{arguments}]")
-        @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamUser")
+        @MethodSource("guru.sfg.brewery.web.controllers.BeerControllerIT#getStreamNotAdmin")
         void initUpdateCustomerFormNotAuthUser(String user, String pwd) throws Exception{
 
             mockMvc.perform(get("/customers/"+ customerId+ "/edit")
