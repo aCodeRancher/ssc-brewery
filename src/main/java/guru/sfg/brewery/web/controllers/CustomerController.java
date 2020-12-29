@@ -81,7 +81,7 @@ public class CustomerController {
     }
 
     @GetMapping("/new")
-    @PreAuthorize("hasAuthority('customer.read')")
+    @PreAuthorize("hasAuthority('customer.create')")
     public String initCreationForm(Model model) {
         model.addAttribute("customer", Customer.builder().build());
         return "customers/createCustomer";
@@ -100,7 +100,7 @@ public class CustomerController {
     }
 
     @GetMapping("/{customerId}/edit")
-    @PreAuthorize("hasAuthority('customer.read')")
+    @PreAuthorize("hasAuthority('customer.update')")
    public String initUpdateCustomerForm(@PathVariable UUID customerId, Model model) {
        if(customerRepository.findById(customerId).isPresent())
           model.addAttribute("customer", customerRepository.findById(customerId).get());
@@ -108,7 +108,7 @@ public class CustomerController {
    }
 
     @PostMapping("/{beerId}/edit")
-    @PreAuthorize("hasAuthority('customer.create')")
+    @PreAuthorize("hasAuthority('customer.update')")
     public String processUpdationForm(@Valid Customer customer, BindingResult result) {
         if (result.hasErrors()) {
             return "beers/createOrUpdateCustomer";
