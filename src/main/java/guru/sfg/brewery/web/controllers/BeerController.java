@@ -90,7 +90,7 @@ public class BeerController {
     }
 
     @GetMapping("/new")
-    @PreAuthorize("hasAuthority('beer.read')")
+    @PreAuthorize("hasAuthority('beer.create')")
     public String initCreationForm(Model model) {
         model.addAttribute("beer", Beer.builder().build());
         return "beers/createBeer";
@@ -114,7 +114,7 @@ public class BeerController {
     }
 
     @GetMapping("/{beerId}/edit")
-    @PreAuthorize("hasAuthority('beer.read')")
+    @PreAuthorize("hasAuthority('beer.update')")
     public String initUpdateBeerForm(@PathVariable UUID beerId, Model model) {
         if (beerRepository.findById(beerId).isPresent())
             model.addAttribute("beer", beerRepository.findById(beerId).get());
