@@ -105,6 +105,7 @@ public abstract class AbstractRestAuthFilter extends AbstractAuthenticationProce
         }
 
         SecurityContextHolder.getContext().setAuthentication(authResult);
+        chain.doFilter(request, response);
 
     }
 
